@@ -30,7 +30,12 @@ SECRET_KEY = 'django-insecure-@n9yb8!s1tm&4rf01gu+@8-hyr15f%--e)416-008-@2_tj#lq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# Allow the Render hostname and localhost. You can also set the
+# environment variable `DJANGO_ALLOWED_HOSTS` to a comma-separated list.
+ALLOWED_HOSTS = os.environ.get(
+    "DJANGO_ALLOWED_HOSTS",
+    "music-player-1g9r.onrender.com,localhost,127.0.0.1",
+).split(",")
 
 
 # Application definition
