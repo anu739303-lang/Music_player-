@@ -2,9 +2,11 @@ import os
 import sys
 from pathlib import Path
 
-# Ensure project root is on sys.path
+# Ensure Django project package parent is on sys.path
 BASE_DIR = Path(__file__).resolve().parent
-sys.path.append(str(BASE_DIR))
+# The actual Django project package lives in the nested folder 'MusicPlayer/MusicPlayer'.
+# Add the inner project parent (MusicPlayer) so `import MusicPlayer.settings` works.
+sys.path.insert(0, str(BASE_DIR / "MusicPlayer"))
 
 # Point to Django settings and expose WSGI application as `app` for Gunicorn
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "MusicPlayer.settings")
