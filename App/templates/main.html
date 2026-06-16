@@ -27,9 +27,12 @@
        <center><a href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% endif %}"><i class="fa fa-step-backward fa-2x"></i></a> &nbsp; &nbsp; &nbsp; <a href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }} {% endif %}"><i class="fa fa-step-forward fa-2x"></i></a></center>
        
       <div class="lecteur">
-       <audio class="fc-media" style="width: 100%;" id="fc-media" controls>
-        <source src="{% if item.audio_file %}{{ item.audio_file.url }}{% else %}{{ item.audio_link }}{% endif %}" type="audio/mpeg"/>
+       {# Use `src` attribute directly and add `crossorigin` in case of external audio links. #}
+       <audio class="fc-media" style="width: 100%;" id="fc-media" controls crossorigin="anonymous"
+         src="{% if item.audio_file %}{{ item.audio_file.url }}{% else %}{{ item.audio_link }}{% endif %}">
+         Your browser does not support the audio element.
        </audio>
+       <div class="audio-debug">Audio src: <span class="audio-src">{% if item.audio_file %}{{ item.audio_file.url }}{% else %}{{ item.audio_link }}{% endif %}</span></div>
       </div>
       </div>     
     
