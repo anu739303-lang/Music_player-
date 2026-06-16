@@ -28,11 +28,14 @@
        
       <div class="lecteur">
        {# Use `src` attribute directly and add `crossorigin` in case of external audio links. #}
+       {# Fallback to a public sample MP3 if neither uploaded file nor audio_link is present #}
+       {% with sample_url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" %}
        <audio class="fc-media" style="width: 100%;" id="fc-media" controls crossorigin="anonymous"
-         src="{% if item.audio_file %}{{ item.audio_file.url }}{% else %}{{ item.audio_link }}{% endif %}">
+         src="{% if item.audio_file %}{{ item.audio_file.url }}{% elif item.audio_link %}{{ item.audio_link }}{% else %}{{ sample_url }}{% endif %}">
          Your browser does not support the audio element.
        </audio>
-       <div class="audio-debug">Audio src: <span class="audio-src">{% if item.audio_file %}{{ item.audio_file.url }}{% else %}{{ item.audio_link }}{% endif %}</span></div>
+      <div class="audio-debug">Audio src: <span class="audio-src">{% if item.audio_file %}{{ item.audio_file.url }}{% elif item.audio_link %}{{ item.audio_link }}{% else %}https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3 (sample fallback){% endif %}</span></div>
+      {% endwith %}
       </div>
       </div>     
     
