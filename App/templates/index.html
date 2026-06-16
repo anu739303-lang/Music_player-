@@ -33,20 +33,28 @@
         const lyricsContainer = document.getElementById('song-lyrics');
         let currentLyricIndex = 0;
 
-        // Retrieve the lyrics data as a JSON string
-        const lyricsData = JSON.parse(document.getElementById('song-lyrics').getAttribute('data-lyrics'));
+        // Retrieve the lyrics data safely. `item.lyrics` may be a plain string
+        // or a JSON array of {time,lyrics} entries; handle both.
+        let lyricsDataRaw = document.getElementById('song-lyrics').getAttribute('data-lyrics') || '';
+        let lyricsData = null;
+        try {
+          lyricsData = JSON.parse(lyricsDataRaw);
+        } catch (e) {
+          lyricsData = null;
+        }
 
-        audio.addEventListener('timeupdate', function () {
-          const currentTime = audio.currentTime;
-
-          // Find the current lyrics based on the time
-          while (currentLyricIndex < lyricsData.length - 1 && currentTime >= timeToSeconds(lyricsData[currentLyricIndex + 1].time)) {
-            currentLyricIndex++;
-          }
-
-          // Update the displayed lyrics
-          lyricsContainer.innerText = lyricsData[currentLyricIndex].lyrics;
-        });
+        if (lyricsData && Array.isArray(lyricsData) && lyricsData.length) {
+          audio.addEventListener('timeupdate', function () {
+            const currentTime = audio.currentTime;
+            while (currentLyricIndex < lyricsData.length - 1 && currentTime >= timeToSeconds(lyricsData[currentLyricIndex + 1].time)) {
+              currentLyricIndex++;
+            }
+            lyricsContainer.innerText = lyricsData[currentLyricIndex].lyrics;
+          });
+        } else {
+          // Not JSON-timed lyrics — just display the raw lyrics text
+          lyricsContainer.innerText = lyricsDataRaw;
+        }
 
         function timeToSeconds(time) {
           const [minutes, seconds] = time.split(':').map(parseFloat);
