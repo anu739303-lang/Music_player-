@@ -256,3 +256,15 @@
     #song-lyrics {
     margin: 0px; /* Remove default margin for the lyrics paragraph */
     }
+
+    .mejs__playpause-button {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.mejs__controls .mejs__playpause-button {
+    position: relative !important;
+    right: auto !important;
+    bottom: auto !important;
+}
